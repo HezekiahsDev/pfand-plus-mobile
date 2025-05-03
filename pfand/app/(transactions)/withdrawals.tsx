@@ -1,12 +1,60 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import HistoryItem from "@/components/ui/dashboard/transactions/History";
+import { MaterialIcons } from "@expo/vector-icons";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 
-export default function WithdawalHistory() {
+export default function WithdrawalHistory() {
+  const withdrawIcon = (
+    <MaterialIcons
+      name="account-balance-wallet"
+      size={24}
+      color="#8B0000" // deep red tone to reflect outflow
+      accessibilityLabel="Wallet withdrawal icon"
+    />
+  );
+
+  const historyData = [
+    {
+      label: "Withdrawal",
+      description: "Funds transferred to bank",
+      amount: 2.5,
+    },
+    {
+      label: "Withdrawal",
+      description: "Pfand balance withdrawn",
+      amount: 1.8,
+    },
+    {
+      label: "Withdrawal",
+      description: "Transfer to savings account",
+      amount: 3.2,
+    },
+    {
+      label: "Withdrawal",
+      description: "Balance sent to PayPal",
+      amount: 0.9,
+    },
+    {
+      label: "Withdrawal",
+      description: "Funds used for purchases",
+      amount: 4.0,
+    },
+  ];
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.container}>
-          <Text style={styles.text}>Withdrawal history Screen</Text>
-          {/* Add more content here if needed */}
+          {historyData.map((item, index) => (
+            <HistoryItem
+              key={index}
+              icon={withdrawIcon}
+              label={item.label}
+              description={item.description}
+              amount={item.amount}
+              currency="€"
+              style={styles.itemSpacing}
+            />
+          ))}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -20,16 +68,12 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
-    alignItems: "center",
     padding: 16,
   },
   container: {
-    alignItems: "center",
-    justifyContent: "center",
+    flex: 1,
   },
-  text: {
-    fontSize: 22,
-    fontFamily: "Lato",
-    color: "#00494f",
+  itemSpacing: {
+    marginBottom: 8,
   },
 });

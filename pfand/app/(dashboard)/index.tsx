@@ -55,7 +55,7 @@ export default function HomeScreen() {
               <BalanceCard
                 title="Wallet Balance"
                 balance={walletBalance}
-                currency="€"
+                currency="€ "
                 actionButton={{
                   label: "Withdraw",
                   onPress: handleWithdraw,
@@ -69,7 +69,7 @@ export default function HomeScreen() {
               <BalanceCard
                 title="Token Balance"
                 balance={tokenBalance}
-                currency="₮"
+                currency="Ᵽ "
                 actionButton={{
                   label: "Convert",
                   onPress: () => console.log("Convert clicked"),
