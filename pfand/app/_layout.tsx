@@ -52,6 +52,7 @@ export default function RootLayout() {
       >
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(dashboard)" />
+        <Stack.Screen name="(transactions)" />
       </Stack>
     </>
   );

@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
     color: "#00bcd4",
     fontSize: scale(14),
     textAlign: "right",
+
     marginTop: verticalScale(0),
     marginBottom: verticalScale(24),
     textDecorationLine: "underline",
