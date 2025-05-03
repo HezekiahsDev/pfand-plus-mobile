@@ -46,7 +46,7 @@ export default function DashboardLayout() {
     <View
       style={{
         flex: 1,
-        backgroundColor: "#fefbf9",
+        backgroundColor: "",
         paddingTop: insets.top,
       }}
     >
