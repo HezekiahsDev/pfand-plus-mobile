@@ -1,6 +1,7 @@
 import Button from "@/components/ui/Button";
 import BalanceCard from "@/components/ui/dashboard/BalanceCard";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   Dimensions,
@@ -103,7 +104,7 @@ export default function HomeScreen() {
           <Button
             label="Transaction"
             textBelow="View transaction"
-            onPress={() => console.log("Button 1 pressed")}
+            onPress={() => router.push("/(transactions)")}
             variant="primary"
             icon={
               <MaterialCommunityIcons name="history" size={50} color="green" />
@@ -146,7 +147,7 @@ export default function HomeScreen() {
           <Button
             label="Pfand+ Token"
             textBelow="Coming soon"
-            onPress={() => console.log("Button 4 pressed")}
+            onPress={() => router.push("/(transactions)")}
             variant="secondary"
             disabled
             icon={
