@@ -1,59 +1,37 @@
-import "@/global.css";
-import * as Font from "expo-font";
-import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
-import { Platform, Text, View } from "react-native";
+import { SessionProvider } from "@/context";
+import { Slot } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+// Import your global CSS file
+import "../global.css";
 
-const useLoadFonts = () => {
-  const [fontsLoaded, setFontsLoaded] = useState(Platform.OS === "web");
-
-  useEffect(() => {
-    if (Platform.OS !== "web") {
-      const loadFonts = async () => {
-        await Font.loadAsync({
-          Lato: require("@/fonts/Lato-Regular.ttf"),
-          "Lato-Bold": require("@/fonts/Lato-Bold.ttf"),
-        });
-        setFontsLoaded(true);
-      };
-
-      loadFonts();
-    }
-  }, []);
-
-  return fontsLoaded;
-};
-
-export default function RootLayout() {
-  const fontsLoaded = useLoadFonts();
-
-  if (!fontsLoaded) {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text style={{ fontFamily: Platform.OS === "web" ? "Lato" : "Lato" }}>
-          Loading...
-        </Text>
-      </View>
-    );
-  }
-
+/**
+ * Root Layout is the highest-level layout in the app, wrapping all other layouts and screens.
+ * It provides:
+ * 1. Global authentication context via SessionProvider
+ * 2. Gesture handling support for the entire app
+ * 3. Global styles and configurations
+ *
+ * This layout affects every screen in the app, including both authenticated
+ * and unauthenticated routes.
+ */
+export default function Root() {
+  // Set up the auth context and render our layout inside of it.
   return (
-    <>
-      <StatusBar style="dark" backgroundColor="#00494f" />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: {
-            paddingTop: 0,
-            backgroundColor: "#00494f",
-          },
-        }}
-      >
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(dashboard)" />
-        <Stack.Screen name="(transactions)" />
-      </Stack>
-    </>
+    <SessionProvider>
+      {/* 
+        GestureHandlerRootView is required for:
+        - Drawer navigation gestures
+        - Swipe gestures
+        - Other gesture-based interactions
+        Must wrap the entire app to function properly
+      */}
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        {/* 
+          Slot renders child routes dynamically
+          This includes both (app) and (auth) group routes
+        */}
+        <Slot />
+      </GestureHandlerRootView>
+    </SessionProvider>
   );
 }

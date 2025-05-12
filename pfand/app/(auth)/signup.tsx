@@ -1,38 +1,60 @@
 import Button from "@/components/ui/Button";
 import TextField from "@/components/ui/Form";
-import React, { useState } from "react";
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-} from "react-native";
+import { useSession } from "@/context";
+import { router } from "expo-router";
+import { useState } from "react";
+import { SafeAreaView, ScrollView, StyleSheet, Text } from "react-native";
+import { scale, verticalScale } from "react-native-size-matters";
 
-const { width, height } = Dimensions.get("window");
-
-const scale = (size: number) => (width / 375) * size;
-const verticalScale = (size: number) => (height / 812) * size;
-
-const SignUpScreen = () => {
-  const [fullName, setFullName] = useState("");
+/**
+ * SignUpScreen component handles new user registration
+ * @returns {JSX.Element} Sign-up form component
+ */
+export default function SignUpScreen() {
+  // ============================================================================
+  // Hooks & State
+  // ============================================================================
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { signUp } = useSession();
 
-  const handleSignUp = () => {
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-    if (!fullName || !email || !password || !confirmPassword) {
-      setError("All fields are required");
-      return;
-    }
+  // ============================================================================
+  // Handlers
+  // ============================================================================
+  const handleRegister = async () => {
     setError("");
-    // Handle Sign Up logic (e.g., API request, navigation)
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return null;
+    }
+
+    try {
+      setLoading(true);
+      const user = await signUp(email, password, fullName);
+      return user;
+    } catch (err) {
+      console.log("[handleRegister] ==>", err);
+      setError("Registration failed. Please try again.");
+      return null;
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleSignUp = async () => {
+    const user = await handleRegister();
+    if (user) {
+      router.replace("/(home)/(dashboard)");
+    }
+  };
+
+  // ============================================================================
+  // Render
+  // ============================================================================
 
   return (
     <SafeAreaView style={styles.container}>
@@ -44,9 +66,6 @@ const SignUpScreen = () => {
           placeholder="Enter your full name"
           value={fullName}
           onChangeText={setFullName}
-          accessible
-          accessibilityLabel="Full Name"
-          accessibilityHint="Please enter your full name"
         />
 
         <TextField
@@ -55,9 +74,6 @@ const SignUpScreen = () => {
           keyboardType="email-address"
           value={email}
           onChangeText={setEmail}
-          accessible
-          accessibilityLabel="Email"
-          accessibilityHint="Please enter your email address"
         />
 
         <TextField
@@ -66,9 +82,6 @@ const SignUpScreen = () => {
           secureTextEntry
           value={password}
           onChangeText={setPassword}
-          accessible
-          accessibilityLabel="Password"
-          accessibilityHint="Please enter your password"
         />
 
         <TextField
@@ -77,9 +90,6 @@ const SignUpScreen = () => {
           secureTextEntry
           value={confirmPassword}
           onChangeText={setConfirmPassword}
-          accessible
-          accessibilityLabel="Confirm Password"
-          accessibilityHint="Please confirm your password"
         />
 
         {error && (
@@ -89,17 +99,19 @@ const SignUpScreen = () => {
         )}
 
         <Button
-          label="Sign Up"
+          label={loading ? "Signing up..." : "Sign Up"}
           onPress={handleSignUp}
           variant="secondary"
           accessibilityLabel="Sign up to create a new account"
           accessibilityRole="button"
+          disabled={loading}
         />
       </ScrollView>
     </SafeAreaView>
   );
-};
+}
 
+// ============================================================================
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -126,23 +138,4 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: verticalScale(10),
   },
-  input: {
-    padding: 14,
-    borderRadius: 8,
-    borderColor: "#fefbf9",
-    borderWidth: 1,
-    fontSize: 16,
-    color: "#000",
-  },
-  focusedInput: {
-    backgroundColor: "#ffffff",
-    padding: 14,
-    borderRadius: 8,
-    borderColor: "#2f855a",
-    borderWidth: 2,
-    fontSize: 16,
-    color: "#000",
-  },
 });
-
-export default SignUpScreen;

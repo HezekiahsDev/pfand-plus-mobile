@@ -1,36 +1,55 @@
-import Button from "@/components/ui/Button";
-import TextField from "@/components/ui/Form";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
-
+import Button from "@/components/ui/Button"; // Make sure this exists
+import TextField from "@/components/ui/Form"; // Make sure this exists
+import { useSession } from "@/context";
+import { router } from "expo-router";
+import { useState } from "react";
 import {
-  Dimensions,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
 } from "react-native";
+import { scale, verticalScale } from "react-native-size-matters"; // Assuming you're using this lib
 
-const { width, height } = Dimensions.get("window");
-
-const scale = (size: number) => (width / 375) * size;
-const verticalScale = (size: number) => (height / 812) * size;
-
-const SignInScreen = () => {
+/**
+ * SignInScreen component handles user authentication through email and password
+ * @returns {JSX.Element} Sign-in form component
+ */
+export default function SignInScreen() {
+  // ============================================================================
+  // Hooks & State
+  // ============================================================================
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error] = useState("");
-  const router = useRouter();
+  const [error, setError] = useState("");
+  const { signIn } = useSession();
 
-  const handleSignIn = () => {
-    // if (!email || !password) {
-    //   setError("Email and password are required");
-    //   return;
-    // }
-    // setError("");
-    router.replace("/(dashboard)");
+  // ============================================================================
+  // Handlers
+  // ============================================================================
+
+  /**
+   * Handles the sign-in process
+   */
+  const handleSignIn = async () => {
+    setError(""); // Clear previous error
+    try {
+      const resp = await signIn(email, password);
+      if (resp) {
+        router.replace("/(home)/(dashboard)");
+      } else {
+        setError("Invalid email or password");
+      }
+    } catch (err) {
+      console.log("[handleSignIn] ==>", err);
+      setError("Something went wrong. Please try again.");
+    }
   };
+
+  // ============================================================================
+  // Render
+  // ============================================================================
 
   return (
     <SafeAreaView style={styles.container}>
@@ -58,6 +77,7 @@ const SignInScreen = () => {
           accessibilityLabel="Password"
           accessibilityHint="Please enter your password"
         />
+
         <TouchableOpacity
           onPress={() => router.push("/forgot-password")}
           accessibilityRole="link"
@@ -67,11 +87,11 @@ const SignInScreen = () => {
           <Text style={styles.forgotText}>Forgot Password?</Text>
         </TouchableOpacity>
 
-        {error && (
+        {error ? (
           <Text style={styles.errorText} accessibilityLiveRegion="assertive">
             {error}
           </Text>
-        )}
+        ) : null}
 
         <Button
           label="Sign In"
@@ -83,7 +103,7 @@ const SignInScreen = () => {
       </ScrollView>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -112,16 +132,11 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(2),
     marginTop: verticalScale(10),
   },
-
   forgotText: {
     color: "#00bcd4",
     fontSize: scale(14),
     textAlign: "right",
-
-    marginTop: verticalScale(0),
     marginBottom: verticalScale(24),
     textDecorationLine: "underline",
   },
 });
-
-export default SignInScreen;
