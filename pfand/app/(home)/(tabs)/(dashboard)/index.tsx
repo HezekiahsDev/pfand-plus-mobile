@@ -104,7 +104,9 @@ export default function HomeScreen() {
           <Button
             label="Transaction"
             textBelow="View transaction"
-            onPress={() => router.push("/(transactions)")}
+            onPress={() =>
+              router.push("/(home)/(tabs)/(dashboard)/(transactions)")
+            }
             variant="primary"
             icon={
               <MaterialCommunityIcons name="history" size={50} color="green" />
@@ -147,7 +149,9 @@ export default function HomeScreen() {
           <Button
             label="Pfand+ Token"
             textBelow="Coming soon"
-            onPress={() => router.push("/(transactions)")}
+            onPress={() =>
+              router.push("/(home)/(tabs)/(dashboard)/(transactions)")
+            }
             variant="secondary"
             disabled
             icon={

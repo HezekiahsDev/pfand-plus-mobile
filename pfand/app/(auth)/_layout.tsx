@@ -10,7 +10,7 @@ export default function AuthLayout() {
       style={{
         flex: 1,
         paddingTop: insets.top,
-        backgroundColor: "transparent",
+        backgroundColor: "00494f",
       }}
     >
       <Stack
