@@ -1,15 +1,12 @@
 import { Stack } from "expo-router";
 import { View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-export default function AuthLayout() {
-  const insets = useSafeAreaInsets();
-
+export default function DashboardLayout() {
   return (
     <View
       style={{
         flex: 1,
-        paddingTop: insets.top,
+        // paddingTop: insets.top,
         backgroundColor: "00494f",
       }}
     >
@@ -23,9 +20,7 @@ export default function AuthLayout() {
         }}
       />
       <Stack.Screen name="index" />
-      <Stack.Screen name="signin" />
-      <Stack.Screen name="signup" />
-      <Stack.Screen name="forgot-password" />
+      <Stack.Screen name="(transaction)" />
     </View>
   );
 }

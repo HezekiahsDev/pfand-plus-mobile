@@ -39,7 +39,7 @@ function CustomTabButton(props: any) {
   );
 }
 
-export default function DashboardLayout() {
+export default function TabsLayout() {
   const insets = useSafeAreaInsets();
 
   return (
@@ -64,7 +64,7 @@ export default function DashboardLayout() {
             },
           ],
           tabBarIcon: ({ focused, color, size }) => {
-            const isHome = route.name === "index";
+            const isHome = route.name === "(dashboard)";
 
             if (isHome) {
               return (
@@ -114,7 +114,7 @@ export default function DashboardLayout() {
       >
         <Tabs.Screen name="overview" />
         <Tabs.Screen name="wallet" />
-        <Tabs.Screen name="index" />
+        <Tabs.Screen name="(dashboard)" />
         <Tabs.Screen name="notifications" />
         <Tabs.Screen name="profile" />
       </Tabs>

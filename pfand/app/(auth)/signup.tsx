@@ -48,7 +48,7 @@ export default function SignUpScreen() {
   const handleSignUp = async () => {
     const user = await handleRegister();
     if (user) {
-      router.replace("/(home)/(dashboard)");
+      router.replace("/(home)/(tabs)/(dashboard)");
     }
   };
 
