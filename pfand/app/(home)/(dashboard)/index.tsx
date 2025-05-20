@@ -1,21 +1,20 @@
 import Button from "@/components/ui/Button";
 import BalanceCard from "@/components/ui/dashboard/BalanceCard";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   Platform,
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 
 const { width } = Dimensions.get("window");
-const cardWidth = (width - 24) / 2; // 8 padding + 8 padding + 8 gap
-
+const cardWidth = (width - 24) / 2;
 export default function HomeScreen() {
   const [walletBalance, setWalletBalance] = useState(0);
   const [tokenBalance, setTokenBalance] = useState(0);
@@ -54,7 +53,7 @@ export default function HomeScreen() {
               <BalanceCard
                 title="Wallet Balance"
                 balance={walletBalance}
-                currency="€"
+                currency="€ "
                 actionButton={{
                   label: "Withdraw",
                   onPress: handleWithdraw,
@@ -68,7 +67,7 @@ export default function HomeScreen() {
               <BalanceCard
                 title="Token Balance"
                 balance={tokenBalance}
-                currency="₮"
+                currency="Ᵽ "
                 actionButton={{
                   label: "Convert",
                   onPress: () => console.log("Convert clicked"),
@@ -103,7 +102,7 @@ export default function HomeScreen() {
           <Button
             label="Transaction"
             textBelow="View transaction"
-            onPress={() => console.log("Button 1 pressed")}
+            onPress={() => router.push("/(home)/(transactions)")}
             variant="primary"
             icon={
               <MaterialCommunityIcons name="history" size={50} color="green" />
@@ -146,7 +145,7 @@ export default function HomeScreen() {
           <Button
             label="Pfand+ Token"
             textBelow="Coming soon"
-            onPress={() => console.log("Button 4 pressed")}
+            onPress={() => router.push("/(home)/(transactions)")}
             variant="secondary"
             disabled
             icon={
@@ -170,7 +169,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#fefbf9",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   scrollViewContent: {
     flexGrow: 1,

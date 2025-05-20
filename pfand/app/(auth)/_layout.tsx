@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { View } from "react-native";
+import { StatusBar, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function AuthLayout() {
@@ -10,9 +10,15 @@ export default function AuthLayout() {
       style={{
         flex: 1,
         paddingTop: insets.top,
-        backgroundColor: "transparent",
+        backgroundColor: "#00494f",
       }}
     >
+      <StatusBar
+        translucent={true}
+        backgroundColor="#00494f"
+        barStyle="light-content"
+      />
+
       <Stack
         screenOptions={{
           headerShown: false,

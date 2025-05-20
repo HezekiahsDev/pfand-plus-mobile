@@ -1,104 +1,108 @@
 import Button from "@/components/ui/Button";
 import TextField from "@/components/ui/Form";
-import React, { useState } from "react";
+import { useSession } from "@/context";
+import { router } from "expo-router";
+import { useState } from "react";
 import {
-  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
 } from "react-native";
+import { scale, verticalScale } from "react-native-size-matters";
 
-const { width, height } = Dimensions.get("window");
-
-const scale = (size: number) => (width / 375) * size;
-const verticalScale = (size: number) => (height / 812) * size;
-
-const SignUpScreen = () => {
-  const [fullName, setFullName] = useState("");
+export default function SignUpScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const { signUp } = useSession(); // Assumes you have a signUp method in context
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
+    setError("");
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-    if (!fullName || !email || !password || !confirmPassword) {
-      setError("All fields are required");
-      return;
+
+    try {
+      const resp = await signUp(email, password);
+      if (resp) {
+        router.replace("/(app)/(dashboard)/home");
+      } else {
+        setError("Sign up failed. Please check your details.");
+      }
+    } catch (err) {
+      console.log("[handleSignUp] ==>", err);
+      setError("Something went wrong. Please try again.");
     }
-    setError("");
-    // Handle Sign Up logic (e.g., API request, navigation)
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.header}>Sign Up</Text>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          keyboardShouldPersistTaps="handled"
+        >
+          <Text style={styles.header}>Sign Up</Text>
 
-        <TextField
-          label="Full Name"
-          placeholder="Enter your full name"
-          value={fullName}
-          onChangeText={setFullName}
-          accessible
-          accessibilityLabel="Full Name"
-          accessibilityHint="Please enter your full name"
-        />
+          <TextField
+            label="Email"
+            placeholder="Enter your email"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+          />
 
-        <TextField
-          label="Email"
-          placeholder="Enter your email"
-          keyboardType="email-address"
-          value={email}
-          onChangeText={setEmail}
-          accessible
-          accessibilityLabel="Email"
-          accessibilityHint="Please enter your email address"
-        />
+          <TextField
+            label="Password"
+            placeholder="Create a password"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
 
-        <TextField
-          label="Password"
-          placeholder="Enter your password"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-          accessible
-          accessibilityLabel="Password"
-          accessibilityHint="Please enter your password"
-        />
+          <TextField
+            label="Confirm Password"
+            placeholder="Confirm your password"
+            secureTextEntry
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+          />
 
-        <TextField
-          label="Confirm Password"
-          placeholder="Confirm your password"
-          secureTextEntry
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          accessible
-          accessibilityLabel="Confirm Password"
-          accessibilityHint="Please confirm your password"
-        />
+          {error ? (
+            <Text style={styles.errorText} accessibilityLiveRegion="assertive">
+              {error}
+            </Text>
+          ) : null}
 
-        {error && (
-          <Text style={styles.errorText} accessibilityLiveRegion="assertive">
-            {error}
-          </Text>
-        )}
+          <Button
+            label="Sign Up"
+            onPress={handleSignUp}
+            variant="secondary"
+            accessibilityLabel="Sign up for an account"
+            accessibilityRole="button"
+          />
 
-        <Button
-          label="Sign Up"
-          onPress={handleSignUp}
-          variant="secondary"
-          accessibilityLabel="Sign up to create a new account"
-          accessibilityRole="button"
-        />
-      </ScrollView>
+          <TouchableOpacity
+            onPress={() => router.push("/signin")}
+            accessibilityRole="link"
+          >
+            <Text style={styles.signIn}>Already have an account? Sign In</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -124,25 +128,21 @@ const styles = StyleSheet.create({
     color: "#ff4c4c",
     fontSize: scale(14),
     textAlign: "center",
+    marginBottom: verticalScale(2),
     marginTop: verticalScale(10),
   },
-  input: {
-    padding: 14,
-    borderRadius: 8,
-    borderColor: "#fefbf9",
-    borderWidth: 1,
-    fontSize: 16,
-    color: "#000",
+  forgotText: {
+    color: "#00bcd4",
+    fontSize: scale(14),
+    textAlign: "center",
+    marginTop: verticalScale(24),
+    textDecorationLine: "underline",
   },
-  focusedInput: {
-    backgroundColor: "#ffffff",
-    padding: 14,
-    borderRadius: 8,
-    borderColor: "#2f855a",
-    borderWidth: 2,
-    fontSize: 16,
-    color: "#000",
+  signIn: {
+    color: "#f4f4f4",
+    fontSize: scale(14),
+    textAlign: "center",
+    marginTop: verticalScale(24),
+    textDecorationLine: "underline",
   },
 });
-
-export default SignUpScreen;

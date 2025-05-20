@@ -6,7 +6,14 @@ import {
 } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { useRef } from "react";
-import { Animated, Platform, Pressable, StyleSheet, View } from "react-native";
+import {
+  Animated,
+  Platform,
+  Pressable,
+  StatusBar,
+  StyleSheet,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function CustomTabButton(props: any) {
@@ -46,10 +53,16 @@ export default function DashboardLayout() {
     <View
       style={{
         flex: 1,
-        backgroundColor: "",
+        backgroundColor: "#fff", // Match your desired background color
         paddingTop: insets.top,
       }}
     >
+      {/* Set the status bar style and background color */}
+      <StatusBar
+        barStyle={Platform.OS === "android" ? "dark-content" : "light-content"}
+        backgroundColor="#fff" // or your preferred background
+      />
+
       <Tabs
         screenOptions={({ route }) => ({
           tabBarShowLabel: false,
@@ -59,8 +72,7 @@ export default function DashboardLayout() {
             styles.tabBarStyle,
             {
               paddingBottom: insets.bottom > 0 ? insets.bottom : 10,
-              height:
-                Platform.OS === "ios" ? 50 + insets.bottom : 50 + insets.bottom,
+              height: 50 + insets.bottom,
             },
           ],
           tabBarIcon: ({ focused, color, size }) => {
@@ -112,9 +124,9 @@ export default function DashboardLayout() {
           tabBarInactiveTintColor: "#999",
         })}
       >
+        <Tabs.Screen name="index" />
         <Tabs.Screen name="overview" />
         <Tabs.Screen name="wallet" />
-        <Tabs.Screen name="index" />
         <Tabs.Screen name="notifications" />
         <Tabs.Screen name="profile" />
       </Tabs>
