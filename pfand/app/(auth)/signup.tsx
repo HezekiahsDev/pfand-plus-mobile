@@ -31,7 +31,7 @@ export default function SignUpScreen() {
     try {
       const resp = await signUp(email, password);
       if (resp) {
-        router.replace("/(app)/(dashboard)/home");
+        router.replace("/(home)/(dashboard)");
       } else {
         setError("Sign up failed. Please check your details.");
       }
