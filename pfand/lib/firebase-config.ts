@@ -7,6 +7,7 @@ import { initializeApp } from "firebase/app";
 
 // IGNORE IMPORT ERROR, this is a valid import, still investigating
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+// @ts-ignore
 import { getReactNativePersistence, initializeAuth } from "firebase/auth";
 
 // ============================================================================
