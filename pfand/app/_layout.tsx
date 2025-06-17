@@ -1,35 +1,40 @@
 import { SessionProvider } from "@/context";
-import { Slot } from "expo-router";
+import { useFonts } from "expo-font";
+import { Slot, SplashScreen } from "expo-router";
+import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 // Import your global CSS file
 import "../global.css";
 
-/**
- * Root Layout is the highest-level layout in the app, wrapping all other layouts and screens.
- * It provides:
- * 1. Global authentication context via SessionProvider
- * 2. Gesture handling support for the entire app
- * 3. Global styles and configurations
- *
- * This layout affects every screen in the app, including both authenticated
- * and unauthenticated routes.
- */
-export default function Root() {
-  // Set up the auth context and render our layout inside of it.
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync();
+
+export default function RootLayout() {
+  // Example of loading fonts. Even if you don't have custom fonts now,
+  // this is the correct pattern for handling any async loading.
+  const [fontsLoaded, fontError] = useFonts({
+    Lato: require("../fonts/Lato-Regular.ttf"),
+    // Add any other fonts you use here
+  });
+
+  // useEffect will run when fontsLoaded or fontError value changes.
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      // Hide the splash screen after the fonts have loaded and the UI is ready.
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  // Prevent rendering until the fonts are loaded
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
+  // Your original layout structure
   return (
     <SessionProvider>
-      {/* 
-        GestureHandlerRootView is required for:
-        - Drawer navigation gestures
-        - Swipe gestures
-        - Other gesture-based interactions
-        Must wrap the entire app to function properly
-      */}
       <GestureHandlerRootView style={{ flex: 1 }}>
-        {/* 
-          Slot renders child routes dynamically
-          This includes both (app) and (auth) group routes
-        */}
         <Slot />
       </GestureHandlerRootView>
     </SessionProvider>
