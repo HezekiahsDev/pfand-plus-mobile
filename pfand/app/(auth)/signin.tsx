@@ -48,6 +48,21 @@ export default function SignInScreen() {
         >
           <Text style={styles.header}>Sign In</Text>
 
+          {/* --- Add this code to print the key --- */}
+          <Text
+            style={{
+              color: "white",
+              textAlign: "center",
+              marginBottom: 20,
+              padding: 5,
+              backgroundColor: "#c00",
+            }}
+          >
+            API Key:{" "}
+            {process.env.EXPO_PUBLIC_FIREBASE_API_KEY || "KEY IS MISSING"}
+          </Text>
+          {/* --- End of code to print the key --- */}
+
           <TextField
             label="Email"
             placeholder="Enter your email"
