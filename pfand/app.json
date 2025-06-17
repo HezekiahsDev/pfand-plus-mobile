@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "pfand",
-    "slug": "pfand",
+    "slug": "new-pfand",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -44,7 +44,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "c5197502-61cb-4353-befd-0e4c8bcff503"
+        "projectId": "b5ef2f65-e353-45f6-8b5b-711a6e96841c"
       }
     },
     "owner": "hezekiahsdev"

@@ -1,42 +1,37 @@
-import { SessionProvider } from "@/context";
 import { useFonts } from "expo-font";
-import { Slot, SplashScreen } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SessionProvider } from "../context"; // Assuming context/index.tsx
 
-// Import your global CSS file
-import "../global.css";
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+// Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  // Example of loading fonts. Even if you don't have custom fonts now,
-  // this is the correct pattern for handling any async loading.
-  const [fontsLoaded, fontError] = useFonts({
-    Lato: require("../fonts/Lato-Regular.ttf"),
-    // Add any other fonts you use here
+  const [loaded, error] = useFonts({
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
-  // useEffect will run when fontsLoaded or fontError value changes.
+  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
-    if (fontsLoaded || fontError) {
-      // Hide the splash screen after the fonts have loaded and the UI is ready.
+    if (error) throw error;
+  }, [error]);
+
+  useEffect(() => {
+    if (loaded) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, fontError]);
+  }, [loaded]);
 
-  // Prevent rendering until the fonts are loaded
-  if (!fontsLoaded && !fontError) {
+  if (!loaded) {
     return null;
   }
 
-  // Your original layout structure
   return (
     <SessionProvider>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <Slot />
-      </GestureHandlerRootView>
+      <Stack>
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(home)" options={{ headerShown: false }} />
+      </Stack>
     </SessionProvider>
   );
 }
