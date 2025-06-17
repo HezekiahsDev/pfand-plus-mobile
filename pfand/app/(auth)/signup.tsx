@@ -19,7 +19,7 @@ export default function SignUpScreen() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const { signUp } = useSession(); // Assumes you have a signUp method in context
+  const { signUp } = useSession();
 
   const handleSignUp = async () => {
     setError("");
