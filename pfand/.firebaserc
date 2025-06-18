@@ -1,0 +1,11 @@
+{
+  "projects": {
+    "default": "pfand-plus-be"
+  },
+  "targets": {},
+  "etags": {
+    "pfand-plus-be": {
+      "extensionInstances": {}
+    }
+  }
+}

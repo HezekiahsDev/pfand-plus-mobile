@@ -12,7 +12,7 @@ import {
 export default function ProfileScreen() {
   const { user, signOut, isLoading } = useSession();
 
-  // Display a loading indicator while the session is being checked
+
   if (isLoading) {
     return (
       <View style={styles.centered}>
@@ -21,7 +21,7 @@ export default function ProfileScreen() {
     );
   }
 
-  // Handle the case where there is no user
+
   if (!user) {
     return (
       <View style={styles.centered}>
@@ -30,7 +30,7 @@ export default function ProfileScreen() {
     );
   }
 
-  // Get user initials for the avatar
+  
   const getInitials = (email: string | null) => {
     if (!email) return "?";
     return email.substring(0, 2).toUpperCase();
