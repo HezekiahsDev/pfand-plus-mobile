@@ -16,7 +16,6 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-// This CustomTabButton component is great, no changes needed here.
 function CustomTabButton(props: any) {
   const scale = useRef(new Animated.Value(1)).current;
 
@@ -54,7 +53,7 @@ export default function DashboardLayout() {
     <View
       style={{
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: "#003a3f",
         paddingTop: insets.top,
       }}
     >
@@ -75,9 +74,8 @@ export default function DashboardLayout() {
               height: 50 + insets.bottom,
             },
           ],
-          // This is now the single source of truth for all icons
+
           tabBarIcon: ({ focused, color, size }) => {
-            // Handle the special scan button first
             if (route.name === "scan") {
               return (
                 <View
@@ -86,15 +84,13 @@ export default function DashboardLayout() {
                     focused && styles.scanIconFocused,
                   ]}
                 >
-                  {/* FIX: Changed the icon to "scan" */}
                   <Ionicons name="scan" size={24} color="white" />
                 </View>
               );
             }
 
-            // Handle all other regular tab icons
             switch (route.name) {
-              case "index": // FIX: Added case for the main "index" route
+              case "index":
                 return (
                   <Ionicons
                     name={focused ? "grid" : "grid-outline"}
