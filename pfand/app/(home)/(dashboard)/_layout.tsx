@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+// This CustomTabButton component is great, no changes needed here.
 function CustomTabButton(props: any) {
   const scale = useRef(new Animated.Value(1)).current;
 
@@ -53,14 +54,13 @@ export default function DashboardLayout() {
     <View
       style={{
         flex: 1,
-        backgroundColor: "#fff", // Match your desired background color
+        backgroundColor: "#fff",
         paddingTop: insets.top,
       }}
     >
-      {/* Set the status bar style and background color */}
       <StatusBar
-        barStyle={Platform.OS === "android" ? "dark-content" : "light-content"}
-        backgroundColor="#fff" // or your preferred background
+        barStyle={Platform.OS === "android" ? "light-content" : "light-content"}
+        backgroundColor="#003a3f"
       />
 
       <Tabs
@@ -75,28 +75,26 @@ export default function DashboardLayout() {
               height: 50 + insets.bottom,
             },
           ],
+          // This is now the single source of truth for all icons
           tabBarIcon: ({ focused, color, size }) => {
-            const isHome = route.name === "index";
-
-            if (isHome) {
+            // Handle the special scan button first
+            if (route.name === "scan") {
               return (
                 <View
                   style={[
-                    styles.homeIconWrapper,
-                    focused && styles.homeIconFocused,
+                    styles.scanIconWrapper,
+                    focused && styles.scanIconFocused,
                   ]}
                 >
-                  <Ionicons
-                    name={focused ? "home" : "home-outline"}
-                    size={24}
-                    color="white"
-                  />
+                  {/* FIX: Changed the icon to "scan" */}
+                  <Ionicons name="scan" size={24} color="white" />
                 </View>
               );
             }
 
+            // Handle all other regular tab icons
             switch (route.name) {
-              case "overview":
+              case "index": // FIX: Added case for the main "index" route
                 return (
                   <Ionicons
                     name={focused ? "grid" : "grid-outline"}
@@ -104,7 +102,7 @@ export default function DashboardLayout() {
                     color={color}
                   />
                 );
-              case "wallet":
+              case "transactions":
                 return <Feather name="credit-card" size={size} color={color} />;
               case "notifications":
                 return (
@@ -125,8 +123,8 @@ export default function DashboardLayout() {
         })}
       >
         <Tabs.Screen name="index" />
-        <Tabs.Screen name="overview" />
-        <Tabs.Screen name="wallet" />
+        <Tabs.Screen name="transactions" />
+        <Tabs.Screen name="scan" />
         <Tabs.Screen name="notifications" />
         <Tabs.Screen name="profile" />
       </Tabs>
@@ -136,15 +134,15 @@ export default function DashboardLayout() {
 
 const styles = StyleSheet.create({
   tabBarStyle: {
-    backgroundColor: "white",
+    backgroundColor: "#E5E5E5",
     borderTopWidth: 0,
     elevation: 10,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: -10 }, // Changed height to -10 for a top shadow effect
+    shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  homeIconWrapper: {
+  scanIconWrapper: {
     backgroundColor: "#ccc",
     height: 48,
     width: 48,
@@ -158,7 +156,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 6,
   },
-  homeIconFocused: {
+  scanIconFocused: {
     backgroundColor: "#00494f",
   },
 });
