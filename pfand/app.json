@@ -22,9 +22,7 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "com.hezekiahsdev.pfand",
-      "permissions": [
-        "android.permission.CAMERA"
-      ]
+      "permissions": ["android.permission.CAMERA"]
     },
     "web": {
       "bundler": "metro",
@@ -44,7 +42,7 @@
       ],
       "expo-font",
       "expo-secure-store",
-      "expo-barcode-scanner"
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
